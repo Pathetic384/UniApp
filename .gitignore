@@ -1,0 +1,6 @@
+# Python
+__pycache__/
+*.pyc
+
+# App data file (generated at runtime)
+students.data
