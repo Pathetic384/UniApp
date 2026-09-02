@@ -1,0 +1,100 @@
+### CLIUniApp API - manual tests
+### How to use:
+###   1) Start the server:  uvicorn api.main:app --reload
+###   2) Install the "REST Client" extension in VS Code
+###   3) Click "Send Request" above each request, top to bottom
+### (Prefer curl/PowerShell? See the bottom of this file.)
+
+@base = http://127.0.0.1:8000
+
+### 1. Register - INVALID password (expect 400)
+POST {{base}}/register
+Content-Type: application/json
+
+{ "email": "leila.tran@university.com", "password": "abc" }
+
+### 2. Register - OK (expect 200). This one is @named so we can reuse the id.
+# @name register
+POST {{base}}/register
+Content-Type: application/json
+
+{ "email": "leila.tran@university.com", "password": "Aabcdef123" }
+
+### reuse the new student id in the next requests
+@sid = {{register.response.body.id}}
+
+### 3. Register same email again (expect 409 already exists)
+POST {{base}}/register
+Content-Type: application/json
+
+{ "email": "leila.tran@university.com", "password": "Aabcdef123" }
+
+### 4. Login - OK (expect 200)
+POST {{base}}/login
+Content-Type: application/json
+
+{ "email": "leila.tran@university.com", "password": "Aabcdef123" }
+
+### 5. Login - wrong password (expect 401)
+POST {{base}}/login
+Content-Type: application/json
+
+{ "email": "leila.tran@university.com", "password": "Wrongpass999" }
+
+### 6. Get one student (expect 200)
+GET {{base}}/students/{{sid}}
+
+### 7. Enrol a subject (expect 200). Send this 4 times.
+POST {{base}}/students/{{sid}}/subjects
+
+### 8. Enrol the 5th time (expect 409 - only 4 allowed)
+POST {{base}}/students/{{sid}}/subjects
+
+### 9. List the student's subjects (expect 200, array of subjects)
+GET {{base}}/students/{{sid}}/subjects
+
+### 10. Remove a subject by its code - replace 007 with a real code from step 9 (expect 200)
+DELETE {{base}}/students/{{sid}}/subjects/007
+
+### 11. Change password (expect 200)
+PUT {{base}}/students/{{sid}}/password
+Content-Type: application/json
+
+{ "new_password": "Newpass123" }
+
+### ---------- Admin ----------
+
+### 12. List all students (expect 200)
+GET {{base}}/admin/students
+
+### 13. Group students by grade (expect 200)
+GET {{base}}/admin/students/grouped
+
+### 14. Partition PASS / FAIL (expect 200)
+GET {{base}}/admin/students/partition
+
+### 15. Remove a non-existent student (expect 404)
+DELETE {{base}}/admin/students/000000
+
+### 16. Remove our student (expect 200)
+DELETE {{base}}/admin/students/{{sid}}
+
+### 17. Clear all data (expect 200)
+DELETE {{base}}/admin/students
+
+### =======================================================================
+### Same tests with curl (run in a terminal while the server is running):
+###
+### curl -X POST http://127.0.0.1:8000/register -H "Content-Type: application/json" -d "{\"email\":\"leila.tran@university.com\",\"password\":\"Aabcdef123\"}"
+### curl -X POST http://127.0.0.1:8000/login    -H "Content-Type: application/json" -d "{\"email\":\"leila.tran@university.com\",\"password\":\"Aabcdef123\"}"
+### curl -X POST http://127.0.0.1:8000/students/<ID>/subjects
+### curl http://127.0.0.1:8000/students/<ID>/subjects
+### curl -X DELETE http://127.0.0.1:8000/students/<ID>/subjects/<CODE>
+### curl http://127.0.0.1:8000/admin/students
+###
+### PowerShell (Invoke-RestMethod):
+###
+### $b = @{ email="leila.tran@university.com"; password="Aabcdef123" } | ConvertTo-Json
+### $s = Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/register -ContentType application/json -Body $b
+### Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8000/students/$($s.id)/subjects"
+### Invoke-RestMethod -Uri http://127.0.0.1:8000/admin/students

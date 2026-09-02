@@ -20,18 +20,23 @@ class CLIUniApp:
                 print("Thank You")
                 break
 
+
+
     # ---------- student system ----------
     def student_menu(self):
         while True:
-            choice = input(TAB + "Student System (l/r/x): ").strip().lower()
+            choice = input(TAB + "Student System (l/r/b/x): ").strip().lower()
             if choice == "l":
                 student = Student()
                 if student.login(self.db):
                     self.course_menu(student)
             elif choice == "r":
                 Student().register(self.db)
-            elif choice == "x":
+            elif choice == "b":
                 break
+            elif choice == "x":
+                print("Thank You")
+                raise SystemExit
 
     def course_menu(self, student):
         while True:

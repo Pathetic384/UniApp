@@ -9,10 +9,11 @@ University System: (A)dmin, (S)tudent, or X :
 - `A` - go to the Admin system
 - `X` - quit
 
-**Student system** (`l/r/x`):
+**Student system** (`l/r/b/x`):
 - `l` - login (for students who already registered)
 - `r` - register (create a new student)
-- `x` - back
+- `b` - back to the University menu
+- `x` - quit the whole app
 
 After logging in you get the **Course menu** (`c/e/r/s/x`):
 - `c` - change password

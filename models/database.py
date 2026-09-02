@@ -14,6 +14,8 @@ class Database:
 
     def read_students(self):
         students = []
+        if not os.path.exists(self.filename):
+            return students
         f = open(self.filename, "r")
         for line in f:
             line = line.strip()
