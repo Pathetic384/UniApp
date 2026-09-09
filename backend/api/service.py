@@ -30,7 +30,7 @@ def _find_student(sid):
 
 
 # ---------- auth ----------
-def register(email, password):
+def register(name, email, password):
     checker = Student()
     if not checker.validate_email(email):
         raise ApiError(400, "Incorrect email format")
@@ -44,7 +44,7 @@ def register(email, password):
     student = Student()
     student.email = email
     student.password = password
-    student.name = student.name_from_email(email)
+    student.name = name
     # unique 6-digit id
     used = {s.id for s in db.read_students()}
     student.id = student.generate_id()

@@ -8,6 +8,7 @@ from models.grade import Grade
 
 # ---------- requests ----------
 class RegisterIn(BaseModel):
+    name: str
     email: str
     password: str
 

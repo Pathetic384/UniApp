@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "CLIUniApp API",
+    "title": "UniApp API",
     "version": "1.0"
   },
   "paths": {
@@ -520,6 +520,10 @@
       },
       "RegisterIn": {
         "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
           "email": {
             "type": "string",
             "title": "Email"
@@ -531,6 +535,7 @@
         },
         "type": "object",
         "required": [
+          "name",
           "email",
           "password"
         ],

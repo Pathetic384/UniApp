@@ -1,4 +1,4 @@
-### CLIUniApp API - manual tests
+### UniApp API - manual tests
 ### How to use:
 ###   1) Start the server:  uvicorn api.main:app --reload
 ###   2) Install the "REST Client" extension in VS Code
@@ -11,14 +11,14 @@
 POST {{base}}/register
 Content-Type: application/json
 
-{ "email": "leila.tran@university.com", "password": "abc" }
+{ "name": "Leila Tran", "email": "leila.tran@university.com", "password": "abc" }
 
 ### 2. Register - OK (expect 200). This one is @named so we can reuse the id.
 # @name register
 POST {{base}}/register
 Content-Type: application/json
 
-{ "email": "leila.tran@university.com", "password": "Aabcdef123" }
+{ "name": "Leila Tran", "email": "leila.tran@university.com", "password": "Aabcdef123" }
 
 ### reuse the new student id in the next requests
 @sid = {{register.response.body.id}}
@@ -27,13 +27,13 @@ Content-Type: application/json
 POST {{base}}/register
 Content-Type: application/json
 
-{ "email": "leila.tran@university.com", "password": "Aabcdef123" }
+{ "name": "Leila Tran", "email": "leila.tran@university.com", "password": "Aabcdef123" }
 
 ### 4. Login - OK (expect 200)
 POST {{base}}/login
 Content-Type: application/json
 
-{ "email": "leila.tran@university.com", "password": "Aabcdef123" }
+{ "name": "Leila Tran", "email": "leila.tran@university.com", "password": "Aabcdef123" }
 
 ### 5. Login - wrong password (expect 401)
 POST {{base}}/login
@@ -85,8 +85,8 @@ DELETE {{base}}/admin/students
 ### =======================================================================
 ### Same tests with curl (run in a terminal while the server is running):
 ###
-### curl -X POST http://127.0.0.1:8000/register -H "Content-Type: application/json" -d "{\"email\":\"leila.tran@university.com\",\"password\":\"Aabcdef123\"}"
-### curl -X POST http://127.0.0.1:8000/login    -H "Content-Type: application/json" -d "{\"email\":\"leila.tran@university.com\",\"password\":\"Aabcdef123\"}"
+### curl -X POST http://127.0.0.1:8000/register -H "Content-Type: application/json" -d "{\"name\":\"Leila Tran\",\"email\":\"leila.tran@university.com\",\"password\":\"Aabcdef123\"}"
+### curl -X POST http://127.0.0.1:8000/login    -H "Content-Type: application/json" -d "{\"name\":\"Leila Tran\",\"email\":\"leila.tran@university.com\",\"password\":\"Aabcdef123\"}"
 ### curl -X POST http://127.0.0.1:8000/students/<ID>/subjects
 ### curl http://127.0.0.1:8000/students/<ID>/subjects
 ### curl -X DELETE http://127.0.0.1:8000/students/<ID>/subjects/<CODE>
@@ -94,7 +94,7 @@ DELETE {{base}}/admin/students
 ###
 ### PowerShell (Invoke-RestMethod):
 ###
-### $b = @{ email="leila.tran@university.com"; password="Aabcdef123" } | ConvertTo-Json
+### $b = @{ name="Leila Tran"; email="leila.tran@university.com"; password="Aabcdef123" } | ConvertTo-Json
 ### $s = Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/register -ContentType application/json -Body $b
 ### Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8000/students/$($s.id)/subjects"
 ### Invoke-RestMethod -Uri http://127.0.0.1:8000/admin/students

@@ -12,7 +12,7 @@ from api.schemas import (
     student_to_out, subject_to_out,
 )
 
-app = FastAPI(title="CLIUniApp API", version="1.0")
+app = FastAPI(title="UniApp API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,12 +30,12 @@ def handle_api_error(request, exc: service.ApiError):
 
 @app.get("/")
 def root():
-    return {"message": "CLIUniApp API. See /docs for the endpoints."}
+    return {"message": "UniApp API. See /docs for the endpoints."}
 
 
 @app.post("/register", response_model=StudentOut, tags=["student"])
 def register(body: RegisterIn):
-    return student_to_out(service.register(body.email, body.password))
+    return student_to_out(service.register(body.name, body.email, body.password))
 
 
 @app.post("/login", response_model=StudentOut, tags=["student"])

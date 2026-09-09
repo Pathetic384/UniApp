@@ -1,9 +1,9 @@
-# CLIUniApp
+# UniApp
 
 University self-enrolment system. The project is split into three parts:
 
 ```
-CLIUniApp/
+UniApp/
 ├── backend/     Python — CLI app + FastAPI backend (models, api)
 ├── frontend/    (teammate) — UI that calls the backend API
 └── database/    (teammate) — database layer

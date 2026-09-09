@@ -17,24 +17,15 @@ class Student:
 
     # ---------- checks / helpers ----------
     def validate_email(self, email):
-        # firstname.lastname@university.com
-        return re.match(r"^[A-Za-z]+\.[A-Za-z]+@university\.com$", email)
+        # must end with the @university.com domain
+        return re.match(r"^[\w.\-]+@university\.com$", email)
 
     def validate_password(self, password):
-        # capital letter, then 5+ letters, then 3+ digits
-        return re.match(r"^[A-Z][A-Za-z]{5,}[0-9]{3,}$", password)
+        # capital letter first, at least 5 letters in total, then 3+ digits
+        return re.match(r"^[A-Z][A-Za-z]{4,}[0-9]{3,}$", password)
 
     def generate_id(self):
         return str(random.randint(1, 999999)).zfill(6)
-
-    def name_from_email(self, email):
-        # john.smith@university.com -> "John Smith"
-        part = email.split("@")[0]
-        words = part.split(".")
-        name = ""
-        for w in words:
-            name = name + w.capitalize() + " "
-        return name.strip()
 
     def ask_credentials(self):
         # keep asking until email and password are the right format
@@ -60,16 +51,22 @@ class Student:
         print(TAB + "Student Sign Up")
         email, password = self.ask_credentials()
 
-        for s in db.read_students():
+        students = db.read_students()
+        for s in students:
             if s.email == email:
                 print(TAB + "Student " + s.name + " already exists")
                 return
 
         self.email = email
         self.password = password
-        self.name = self.name_from_email(email)
+        self.name = input(TAB + "Name: ")
+        # keep generating until the id is not used by another student
+        used = []
+        for s in students:
+            used.append(s.id)
         self.id = self.generate_id()
-        print(TAB + "Name: " + self.name)
+        while self.id in used:
+            self.id = self.generate_id()
         print(TAB + "Enrolling Student " + self.name)
         db.add_student(self)
 
@@ -94,7 +91,13 @@ class Student:
         if len(self.subjects) >= 4:
             print(TAB + "Students are allowed to enrol in 4 subjects only")
             return
+        # keep generating until the code is not one the student already has
+        used = []
+        for s in self.subjects:
+            used.append(s.code)
         subject = Subject()
+        while subject.code in used:
+            subject = Subject()
         self.subjects.append(subject)
         print(TAB + "Enrolling in Subject-" + str(subject.code))
         print(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects")
