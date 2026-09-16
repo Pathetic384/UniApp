@@ -52,6 +52,7 @@ def register(name, email, password):
         student.id = student.generate_id()
 
     db.add_student(student)
+    db.log.record("REGISTER", student.name + " :: " + student.id + " (" + student.email + ")")
     return student
 
 
@@ -80,6 +81,7 @@ def enrol(sid):
         subject = Subject()
     student.subjects.append(subject)
     db.save_student(student)
+    db.log.record("ENROL", student.name + " :: " + student.id + " enrolled in Subject-" + str(subject.code).zfill(3))
     return student
 
 
@@ -93,13 +95,19 @@ def remove_subject(sid, code):
         raise ApiError(404, "Subject not found")
     student.subjects.remove(found)
     db.save_student(student)
+    db.log.record("DROP", student.name + " :: " + student.id + " dropped Subject-" + str(found.code).zfill(3))
     return student
 
 
-def change_password(sid, new_password):
+def change_password(sid, current_password, new_password):
     student = get_student(sid)
+    if current_password != student.password:
+        raise ApiError(401, "Incorrect current password")
+    if not student.validate_password(new_password):
+        raise ApiError(400, "Incorrect password format")
     student.password = new_password
     db.save_student(student)
+    db.log.record("PASSWORD", student.name + " :: " + student.id + " changed their password")
     return student
 
 
@@ -128,7 +136,14 @@ def partition_pass_fail():
 def remove_student(sid):
     if not db.remove_student(sid):
         raise ApiError(404, "Student not found")
+    db.log.record("REMOVE", "Admin removed student " + sid)
 
 
 def clear_all():
+    count = len(db.read_students())
     db.clear()
+    db.log.record("CLEAR", "Admin cleared the database (" + str(count) + " students removed)")
+
+
+def recent_changes(limit=20):
+    return db.log.read_entries(limit)

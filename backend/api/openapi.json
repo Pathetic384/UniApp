@@ -457,6 +457,49 @@
           }
         }
       }
+    },
+    "/admin/log": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Admin Recent Changes",
+        "operationId": "admin_recent_changes_admin_log_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -473,6 +516,22 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "LogOut": {
+        "properties": {
+          "entries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Entries"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entries"
+        ],
+        "title": "LogOut"
       },
       "LoginIn": {
         "properties": {
@@ -507,6 +566,10 @@
       },
       "PasswordIn": {
         "properties": {
+          "current_password": {
+            "type": "string",
+            "title": "Current Password"
+          },
           "new_password": {
             "type": "string",
             "title": "New Password"
@@ -514,6 +577,7 @@
         },
         "type": "object",
         "required": [
+          "current_password",
           "new_password"
         ],
         "title": "PasswordIn"

@@ -1,12 +1,15 @@
 import os
 import json
 
+from models.activity_log import ActivityLog
+from models.storage import path_for
 from models.student import Student, load_student
 
 
 class Database:
     def __init__(self):
-        self.filename = "students.data"
+        self.filename = path_for("students.data")
+        self.log = ActivityLog()
         # create the file if it does not exist yet
         if not os.path.exists(self.filename):
             f = open(self.filename, "w")
@@ -39,10 +42,15 @@ class Database:
     def save_student(self, student):
         # update one student that is already saved in the file
         students = self.read_students()
+        found = False
         for i in range(len(students)):
             if students[i].id == student.id:
                 students[i] = student
+                found = True
+        if not found:
+            return False
         self.write_students(students)
+        return True
 
     def remove_student(self, student_id):
         # returns True if a student was removed

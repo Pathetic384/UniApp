@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from api import service
 from api.schemas import (
     RegisterIn, LoginIn, PasswordIn,
-    StudentOut, SubjectOut, MessageOut,
+    StudentOut, SubjectOut, MessageOut, LogOut,
     student_to_out, subject_to_out,
 )
 
@@ -66,7 +66,7 @@ def remove_subject(sid: str, code: str):
 
 @app.put("/students/{sid}/password", response_model=StudentOut, tags=["student"])
 def change_password(sid: str, body: PasswordIn):
-    return student_to_out(service.change_password(sid, body.new_password))
+    return student_to_out(service.change_password(sid, body.current_password, body.new_password))
 
 
 @app.get("/admin/students", response_model=list[StudentOut], tags=["admin"])
@@ -96,3 +96,8 @@ def admin_remove_student(sid: str):
 def admin_clear_all():
     service.clear_all()
     return MessageOut(message="Students data cleared")
+
+
+@app.get("/admin/log", response_model=LogOut, tags=["admin"])
+def admin_recent_changes(limit: int = 20):
+    return LogOut(entries=service.recent_changes(limit))
