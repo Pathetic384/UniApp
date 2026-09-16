@@ -10,6 +10,13 @@ class CLIUniApp:
         self.db = Database()
 
     def main(self):
+        try:
+            self.university_menu()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            print("Thank You")
+
+    def university_menu(self):
         while True:
             choice = input("University System: (A)dmin, (S)tudent, or X : ").strip().lower()
             if choice == "a":
@@ -19,24 +26,23 @@ class CLIUniApp:
             elif choice == "x":
                 print("Thank You")
                 break
-
-
+            else:
+                print("Invalid option")
 
     # ---------- student system ----------
     def student_menu(self):
         while True:
-            choice = input(TAB + "Student System (l/r/b/x): ").strip().lower()
+            choice = input(TAB + "Student System (l/r/x): ").strip().lower()
             if choice == "l":
                 student = Student()
                 if student.login(self.db):
                     self.course_menu(student)
             elif choice == "r":
                 Student().register(self.db)
-            elif choice == "b":
-                break
             elif choice == "x":
-                print("Thank You")
-                raise SystemExit
+                break
+            else:
+                print(TAB + "Invalid option")
 
     def course_menu(self, student):
         while True:
@@ -51,12 +57,14 @@ class CLIUniApp:
                 student.view_enrolment()
             elif choice == "x":
                 break
+            else:
+                print(TAB + "Invalid option")
 
     # ---------- admin system ----------
     def admin_menu(self):
         admin = Admin(self.db)
         while True:
-            choice = input(TAB + "Admin System (c/g/p/r/s/x): ").strip().lower()
+            choice = input(TAB + "Admin System (c/g/p/r/s/v/x): ").strip().lower()
             if choice == "c":
                 admin.clear_database()
             elif choice == "g":
@@ -67,5 +75,9 @@ class CLIUniApp:
                 admin.remove_student()
             elif choice == "s":
                 admin.show_students()
+            elif choice == "v":
+                admin.show_log()
             elif choice == "x":
                 break
+            else:
+                print(TAB + "Invalid option")

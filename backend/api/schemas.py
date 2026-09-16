@@ -19,6 +19,7 @@ class LoginIn(BaseModel):
 
 
 class PasswordIn(BaseModel):
+    current_password: str
     new_password: str
 
 
@@ -41,6 +42,10 @@ class StudentOut(BaseModel):
 
 class MessageOut(BaseModel):
     message: str
+
+
+class LogOut(BaseModel):
+    entries: list[str]
 
 
 # ---------- converters ----------

@@ -64,6 +64,7 @@ class Admin:
         student_id = input(TAB + "Remove by ID: ")
         if self.db.remove_student(student_id):
             print(TAB + "Removing Student " + student_id + " Account")
+            self.db.log.record("REMOVE", "Admin removed student " + student_id)
         else:
             print(TAB + "Student " + student_id + " does not exist")
 
@@ -71,5 +72,16 @@ class Admin:
         print(TAB + "Clearing students database")
         answer = input(TAB + "Are you sure you want to clear the database (Y)ES/(N)O: ").strip().lower()
         if answer == "y":
+            count = len(self.db.read_students())
             self.db.clear()
             print(TAB + "Students data cleared")
+            self.db.log.record("CLEAR", "Admin cleared the database (" + str(count) + " students removed)")
+
+    def show_log(self):
+        entries = self.db.log.read_entries(20)
+        print(TAB + "Recent Changes")
+        if len(entries) == 0:
+            print(TAB + TAB + "< Nothing to Display >")
+        else:
+            for e in entries:
+                print(TAB + e)

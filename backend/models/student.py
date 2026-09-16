@@ -5,6 +5,8 @@ import random
 from models.subject import Subject
 
 TAB = "        "
+EMAIL_PATTERN = r"^[A-Za-z]+\.[A-Za-z]+@university\.com$"
+PASSWORD_PATTERN = r"^[A-Z][A-Za-z]{5,}[0-9]{3,}$"
 
 
 class Student:
@@ -17,12 +19,12 @@ class Student:
 
     # ---------- checks / helpers ----------
     def validate_email(self, email):
-        # must end with the @university.com domain
-        return re.match(r"^[\w.\-]+@university\.com$", email)
+        # firstname.lastname on the @university.com domain
+        return re.match(EMAIL_PATTERN, email)
 
     def validate_password(self, password):
-        # capital letter first, at least 5 letters in total, then 3+ digits
-        return re.match(r"^[A-Z][A-Za-z]{4,}[0-9]{3,}$", password)
+        # capital letter first, at least 5 more letters, then 3+ digits
+        return re.match(PASSWORD_PATTERN, password)
 
     def generate_id(self):
         return str(random.randint(1, 999999)).zfill(6)
@@ -69,6 +71,7 @@ class Student:
             self.id = self.generate_id()
         print(TAB + "Enrolling Student " + self.name)
         db.add_student(self)
+        db.log.record("REGISTER", self.name + " :: " + self.id + " (" + self.email + ")")
 
     def login(self, db):
         # ask for credentials, then load the matching student's data into self.
@@ -102,6 +105,7 @@ class Student:
         print(TAB + "Enrolling in Subject-" + str(subject.code))
         print(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects")
         db.save_student(self)
+        db.log.record("ENROL", self.name + " :: " + self.id + " enrolled in Subject-" + str(subject.code).zfill(3))
 
     def remove_subject(self, db):
         code = input(TAB + "Remove Subject by ID: ")
@@ -116,6 +120,7 @@ class Student:
             print(TAB + "Droping Subject-" + str(found.code))
             print(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects")
             db.save_student(self)
+            db.log.record("DROP", self.name + " :: " + self.id + " dropped Subject-" + str(found.code).zfill(3))
 
     def view_enrolment(self):
         print(TAB + "Showing " + str(len(self.subjects)) + " subjects")
@@ -128,7 +133,15 @@ class Student:
 
     def change_password(self, db):
         print(TAB + "Updating Password")
-        new_password = input(TAB + "New Password: ")
+        current = input(TAB + "Current Password: ")
+        if current != self.password:
+            print(TAB + "Incorrect current password")
+            return
+        while True:
+            new_password = input(TAB + "New Password: ")
+            if self.validate_password(new_password):
+                break
+            print(TAB + "Incorrect password format")
         while True:
             confirm = input(TAB + "Confirm Password: ")
             if confirm == new_password:
@@ -136,6 +149,7 @@ class Student:
             print(TAB + "Password does not match - try again")
         self.password = new_password
         db.save_student(self)
+        db.log.record("PASSWORD", self.name + " :: " + self.id + " changed their password")
 
     # ---------- saving / loading ----------
     def to_json(self):

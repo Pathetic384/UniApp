@@ -56,11 +56,17 @@ GET {{base}}/students/{{sid}}/subjects
 ### 10. Remove a subject by its code - replace 007 with a real code from step 9 (expect 200)
 DELETE {{base}}/students/{{sid}}/subjects/007
 
-### 11. Change password (expect 200)
+### 11. Change password - wrong current password (expect 401)
 PUT {{base}}/students/{{sid}}/password
 Content-Type: application/json
 
-{ "new_password": "Newpass123" }
+{ "current_password": "Wrongpass999", "new_password": "Newpass123" }
+
+### 11b. Change password (expect 200)
+PUT {{base}}/students/{{sid}}/password
+Content-Type: application/json
+
+{ "current_password": "Aabcdef123", "new_password": "Newpass123" }
 
 ### ---------- Admin ----------
 
@@ -81,6 +87,9 @@ DELETE {{base}}/admin/students/{{sid}}
 
 ### 17. Clear all data (expect 200)
 DELETE {{base}}/admin/students
+
+### 18. Recent changes log (expect 200)
+GET {{base}}/admin/log?limit=20
 
 ### =======================================================================
 ### Same tests with curl (run in a terminal while the server is running):
