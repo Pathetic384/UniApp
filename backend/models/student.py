@@ -5,6 +5,7 @@ import random
 from models.subject import Subject
 
 TAB = "        "
+BACK = "x"
 EMAIL_PATTERN = r"^[A-Za-z]+\.[A-Za-z]+@university\.com$"
 PASSWORD_PATTERN = r"^[A-Z][A-Za-z]{5,}[0-9]{3,}$"
 
@@ -30,10 +31,14 @@ class Student:
         return str(random.randint(1, 999999)).zfill(6)
 
     def ask_credentials(self):
-        # keep asking until email and password are the right format
+        # keep asking until email and password are the right format, or x to go back
         while True:
             email = input(TAB + "Email: ")
+            if email.strip().lower() == BACK:
+                return None
             password = input(TAB + "Password: ")
+            if password.strip().lower() == BACK:
+                return None
             if self.validate_email(email) and self.validate_password(password):
                 print(TAB + "email and password formats acceptable")
                 return email, password
@@ -51,7 +56,10 @@ class Student:
     # ---------- use-case actions ----------
     def register(self, db):
         print(TAB + "Student Sign Up")
-        email, password = self.ask_credentials()
+        credentials = self.ask_credentials()
+        if credentials is None:
+            return
+        email, password = credentials
 
         students = db.read_students()
         for s in students:
@@ -77,7 +85,10 @@ class Student:
         # ask for credentials, then load the matching student's data into self.
         # returns True if the login worked.
         print(TAB + "Student Sign In")
-        email, password = self.ask_credentials()
+        credentials = self.ask_credentials()
+        if credentials is None:
+            return False
+        email, password = credentials
 
         for s in db.read_students():
             if s.email == email and s.password == password:
@@ -134,16 +145,22 @@ class Student:
     def change_password(self, db):
         print(TAB + "Updating Password")
         current = input(TAB + "Current Password: ")
+        if current.strip().lower() == BACK:
+            return
         if current != self.password:
             print(TAB + "Incorrect current password")
             return
         while True:
             new_password = input(TAB + "New Password: ")
+            if new_password.strip().lower() == BACK:
+                return
             if self.validate_password(new_password):
                 break
             print(TAB + "Incorrect password format")
         while True:
             confirm = input(TAB + "Confirm Password: ")
+            if confirm.strip().lower() == BACK:
+                return
             if confirm == new_password:
                 break
             print(TAB + "Password does not match - try again")

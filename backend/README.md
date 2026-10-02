@@ -36,6 +36,7 @@ After logging in you get the **Course menu** (`c/e/r/s/x`):
   required, so `johnsmith@university.com` is rejected.
 - **Password** must start with a capital letter, have at least 5 more letters,
   then at least 3 digits - so `Helloworld123` is fine but `Hello123` is not.
+- At any `Email` / `Password` prompt, typing `x` goes back to the menu.
 - A student can enrol in **at most 4 subjects**.
 - Each subject gets a random mark (25-100) and a grade:
   `< 50 = Z`, `50-64 = P`, `65-74 = C`, `75-84 = D`, `85+ = HD`.
