@@ -3,7 +3,7 @@ import { GRADES } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import studyGroup from "../assets/study-group.jpg";
 import studentLibrary from "../assets/student-library.jpg";
-import tutorHelp from "../assets/tutor-help.jpg";
+import tutorHelp from "../assets/adminlor.avif";
 import "./Home.css";
 
 const DEMO = [
@@ -50,7 +50,7 @@ export default function Home() {
             </li>
             <li>
               <strong>Keep track</strong>
-              <span>See your average and whether you're passing. Remove subjects or change your password any time.</span>
+              <span>See your average and whether you're passing. Remove subjects or change your password.</span>
             </li>
           </ol>
         </div>
