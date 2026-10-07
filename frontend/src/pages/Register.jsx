@@ -48,7 +48,7 @@ export default function Register() {
         <label>
           University email
           <input type="email" autoComplete="username" value={email}
-            onChange={(e) => setEmail(e.target.value)} placeholder="Format: firstname.lastname@university.com"
+            onChange={(e) => setEmail(e.target.value)} placeholder="firstname.lastname@university.com"
             aria-invalid={email ? !emailOk : undefined} />
         </label>
         <label>
