@@ -17,8 +17,6 @@ export default function Layout() {
           </NavLink>
           <nav className="mainnav">
             <NavLink to="/" end>Home</NavLink>
-            <NavLink to={student ? "/student" : "/login"}>My enrolment</NavLink>
-            <NavLink to="/admin">Admin</NavLink>
           </nav>
           <div className="session">
             {student ? (
