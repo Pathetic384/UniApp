@@ -147,6 +147,16 @@ a { color: inherit; }
 }
 .form input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px #2350d833; }
 .form input[aria-invalid="true"] { border-color: var(--Z); }
+.password-wrap { position: relative; display: flex; align-items: center; width: 100%; }
+.password-wrap input { width: 100%; padding-right: 2.75rem; }
+.password-toggle {
+  position: absolute; right: .45rem; top: 50%; transform: translateY(-50%);
+  background: transparent; border: none; padding: .35rem; display: flex;
+  align-items: center; justify-content: center; color: var(--ink-soft);
+  cursor: pointer; border-radius: var(--r-sm); transition: color .15s, background-color .15s;
+}
+.password-toggle:hover { color: var(--ink); background: var(--paper); }
+.password-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .form .btn { align-self: flex-start; }
 .rule, .rules li { font-weight: 400; font-size: .8125rem; color: var(--ink-soft); }
 .rules { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .15rem; }

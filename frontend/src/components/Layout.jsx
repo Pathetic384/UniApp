@@ -21,7 +21,15 @@ export default function Layout() {
             {student ? (
               <>
                 <NavLink to="/student" className="btn btn-quiet">{student.name}</NavLink>
-                <NavLink to="/" className="btn btn-quiet">Log out</NavLink>
+                <button
+                  className="btn btn-quiet"
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                >
+                  Log out
+                </button>
               </>
             ) : (
               <>
