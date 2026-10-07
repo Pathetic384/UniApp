@@ -6,6 +6,7 @@ import Notice from "../components/Notice.jsx";
 
 export default function ChangePassword() {
   const { student } = useAuth();
+  const [currentPwd, setCurrentPwd] = useState("");
   const [pwd, setPwd] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
@@ -18,13 +19,15 @@ export default function ChangePassword() {
   async function onSubmit(e) {
     e.preventDefault();
     setDone("");
+    if (!currentPwd) return setError("Please enter your current password.");
     if (!pwdOk) return setError("Your new password doesn't meet the rules below.");
     if (pwd !== confirm) return setError("The two passwords don't match.");
     setBusy(true);
     setError("");
     try {
-      await api.changePassword(student.id, pwd);
+      await api.changePassword(student.id, currentPwd, pwd);
       setDone("Password changed.");
+      setCurrentPwd("");
       setPwd("");
       setConfirm("");
     } catch (err) {
@@ -41,6 +44,10 @@ export default function ChangePassword() {
       <form onSubmit={onSubmit} className="form" noValidate>
         <Notice>{error}</Notice>
         <Notice kind="ok">{done}</Notice>
+        <label>
+          Current password
+          <input type="password" autoComplete="current-password" value={currentPwd} onChange={(e) => setCurrentPwd(e.target.value)} />
+        </label>
         <label>
           New password
           <input type="password" autoComplete="new-password" value={pwd} onChange={(e) => setPwd(e.target.value)} />

@@ -32,7 +32,10 @@ export default function Layout() {
                 </button>
               </>
             ) : (
-              <NavLink to="/login" className="btn btn-quiet">Log in</NavLink>
+              <>
+                <NavLink to="/register" className="btn btn-quiet">Sign up</NavLink>
+                <NavLink to="/login" className="btn btn-quiet">Log in</NavLink>
+              </>
             )}
           </div>
         </div>

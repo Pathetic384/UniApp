@@ -12,14 +12,14 @@ class Database:
         self.log = ActivityLog()
         # create the file if it does not exist yet
         if not os.path.exists(self.filename):
-            f = open(self.filename, "w")
+            f = open(self.filename, "w", encoding="utf-8")
             f.close()
 
     def read_students(self):
         students = []
         if not os.path.exists(self.filename):
             return students
-        f = open(self.filename, "r")
+        f = open(self.filename, "r", encoding="utf-8", errors="replace")
         for line in f:
             line = line.strip()
             if line != "":
@@ -29,7 +29,7 @@ class Database:
         return students
 
     def write_students(self, students):
-        f = open(self.filename, "w")
+        f = open(self.filename, "w", encoding="utf-8")
         for s in students:
             f.write(s.to_json() + "\n")
         f.close()
@@ -66,5 +66,5 @@ class Database:
         return True
 
     def clear(self):
-        f = open(self.filename, "w")
+        f = open(self.filename, "w", encoding="utf-8")
         f.close()
