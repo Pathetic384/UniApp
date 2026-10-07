@@ -7,6 +7,8 @@ export default function Layout() {
   const location = useLocation();
 
   const isAdmin = location.pathname.startsWith("/admin");
+  const isLogin = location.pathname.startsWith("/login");
+
 
   return (
     <div className="shell">
@@ -36,7 +38,9 @@ export default function Layout() {
               </>
             ) : (
               <>
-                <NavLink to="/login" className="btn btn-quiet">Log in</NavLink>
+                {isLogin ? null : (
+                  <NavLink to="/login" className="btn btn-quiet">Log in</NavLink>
+                )}
                 <NavLink to="/register" className="btn btn-primary">Sign up</NavLink>
               </>
             )}
