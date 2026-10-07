@@ -50,7 +50,7 @@ export default function Home() {
             </li>
             <li>
               <strong>Keep track</strong>
-              <span>See your average and whether you're passing. Remove subjects or change your password any time.</span>
+              <span>See your average and whether you're passing. Remove subjects or change your password.</span>
             </li>
           </ol>
         </div>
