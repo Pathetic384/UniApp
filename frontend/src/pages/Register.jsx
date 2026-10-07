@@ -44,7 +44,6 @@ export default function Register() {
       <h1>Create a student account</h1>
       <p className="lead">Your name is taken from your email, and a 6-digit student ID is assigned for you.</p>
       <form onSubmit={onSubmit} className="form" noValidate>
-        <Notice>{error}</Notice>
         <label>
           University email
           <input type="email" autoComplete="username" value={email}
@@ -56,12 +55,19 @@ export default function Register() {
           <input type="password" autoComplete="new-password" value={password}
             onChange={(e) => setPassword(e.target.value)} placeholder="Helloworld123"
             aria-invalid={password ? !pwdOk : undefined} />
-          <ul className="rules">
-            {checks.map((c) => (
-              <li key={c.text} className={password ? (c.ok ? "ok" : "bad") : ""}>{c.text}</li>
-            ))}
-          </ul>
         </label>
+        {error && (
+          <Notice>
+            <div>{error}</div>
+            {error.includes("rules") && (
+              <ul className="rules" style={{ marginTop: ".5rem" }}>
+                {checks.map((c) => (
+                  <li key={c.text} className={c.ok ? "ok" : "bad"}>{c.text}</li>
+                ))}
+              </ul>
+            )}
+          </Notice>
+        )}
         <button className="btn btn-primary" disabled={busy}>{busy ? "Creating account…" : "Create account"}</button>
       </form>
       <p className="muted">
