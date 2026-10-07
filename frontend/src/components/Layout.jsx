@@ -16,7 +16,6 @@ export default function Layout() {
             UniApp
           </NavLink>
           <nav className="mainnav">
-            <NavLink to="/" end>Home</NavLink>
           </nav>
           <div className="session">
             {student ? (
