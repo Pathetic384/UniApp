@@ -33,11 +33,11 @@ class Student:
     def ask_credentials(self):
         # keep asking until email and password are the right format, or x to go back
         while True:
-            email = input(TAB + "Email: ")
-            if email.strip().lower() == BACK:
+            email = input(TAB + "Email: ").strip()
+            if email.lower() == BACK:
                 return None
-            password = input(TAB + "Password: ")
-            if password.strip().lower() == BACK:
+            password = input(TAB + "Password: ").strip()
+            if password.lower() == BACK:
                 return None
             if self.validate_email(email) and self.validate_password(password):
                 print(TAB + "email and password formats acceptable")
@@ -69,7 +69,7 @@ class Student:
 
         self.email = email
         self.password = password
-        self.name = input(TAB + "Name: ")
+        self.name = input(TAB + "Name: ").strip()
         # keep generating until the id is not used by another student
         used = []
         for s in students:
@@ -119,7 +119,7 @@ class Student:
         db.log.record("ENROL", self.name + " :: " + self.id + " enrolled in Subject-" + str(subject.code).zfill(3))
 
     def remove_subject(self, db):
-        code = input(TAB + "Remove Subject by ID: ")
+        code = input(TAB + "Remove Subject by ID: ").strip()
         found = None
         for s in self.subjects:
             if str(s.code) == code or str(s.code).zfill(3) == code:
@@ -144,22 +144,22 @@ class Student:
 
     def change_password(self, db):
         print(TAB + "Updating Password")
-        current = input(TAB + "Current Password: ")
-        if current.strip().lower() == BACK:
+        current = input(TAB + "Current Password: ").strip()
+        if current.lower() == BACK:
             return
         if current != self.password:
             print(TAB + "Incorrect current password")
             return
         while True:
-            new_password = input(TAB + "New Password: ")
-            if new_password.strip().lower() == BACK:
+            new_password = input(TAB + "New Password: ").strip()
+            if new_password.lower() == BACK:
                 return
             if self.validate_password(new_password):
                 break
             print(TAB + "Incorrect password format")
         while True:
-            confirm = input(TAB + "Confirm Password: ")
-            if confirm.strip().lower() == BACK:
+            confirm = input(TAB + "Confirm Password: ").strip()
+            if confirm.lower() == BACK:
                 return
             if confirm == new_password:
                 break

@@ -61,7 +61,7 @@ class Admin:
         print(TAB + "PASS --> [" + self.join(pass_list) + "]")
 
     def remove_student(self):
-        student_id = input(TAB + "Remove by ID: ")
+        student_id = input(TAB + "Remove by ID: ").strip()
         if self.db.remove_student(student_id):
             print(TAB + "Removing Student " + student_id + " Account")
             self.db.log.record("REMOVE", "Admin removed student " + student_id)
