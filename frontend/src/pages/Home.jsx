@@ -3,7 +3,7 @@ import { GRADES } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import studyGroup from "../assets/study-group.jpg";
 import studentLibrary from "../assets/student-library.jpg";
-import tutorHelp from "../assets/tutor-help.jpg";
+import tutorHelp from "../assets/adminlor.avif";
 import "./Home.css";
 
 const DEMO = [
