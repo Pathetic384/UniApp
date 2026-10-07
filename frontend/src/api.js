@@ -36,10 +36,14 @@ async function request(path, { method = "GET", body } = {}) {
 // Some endpoints may wrap the student, e.g. { student: {...} }.
 const unwrap = (d) => d?.student ?? d;
 
+// "john.smith@university.com" -> "John Smith", as promised on the register page.
+export const nameFromEmail = (email) =>
+  email.split("@")[0].split(".").map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(" ");
+
 export const api = {
   // Student
   register: (email, password) =>
-    request("/register", { method: "POST", body: { email, password } }).then(unwrap),
+    request("/register", { method: "POST", body: { name: nameFromEmail(email), email, password } }).then(unwrap),
   login: (email, password) =>
     request("/login", { method: "POST", body: { email, password } }).then(unwrap),
   getStudent: (sid) => request(`/students/${sid}`).then(unwrap),
