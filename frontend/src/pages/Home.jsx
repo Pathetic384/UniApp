@@ -27,38 +27,10 @@ export default function Home() {
             Register with your university email, enrol in up to four subjects, and see the
             mark and grade for each one as soon as you add it.
           </p>
-          <div className="actions">
-            {student ? (
-              <Link to="/student" className="btn btn-primary">Open my enrolment</Link>
-            ) : (
-              <>
-                <Link to="/register" className="btn btn-primary">Create a student account</Link>
-                <Link to="/login" className="btn">Log in</Link>
-              </>
-            )}
-          </div>
         </div>
 
         <figure className="home-hero-media">
           <img src={studyGroup} alt="Four students working together around laptops and textbooks" />
-          <div className="home-enrol-card" aria-label="Example enrolment: three of four subjects">
-            <div className="hec-head">
-              <strong>My enrolment</strong>
-              <span>3 of 4</span>
-            </div>
-            <div className="hec-slots">
-              {DEMO.map((s, i) =>
-                s ? (
-                  <div key={i} className={`hec-slot band-${s.grade}`}>
-                    <span className="hec-grade">{s.grade}</span>
-                    <span className="hec-mark">{s.mark}</span>
-                  </div>
-                ) : (
-                  <div key={i} className="hec-slot hec-empty" aria-label="Free slot" />
-                )
-              )}
-            </div>
-          </div>
         </figure>
       </section>
 

@@ -47,8 +47,8 @@ export const api = {
   enrol: (sid) => request(`/students/${sid}/subjects`, { method: "POST" }),
   removeSubject: (sid, code) =>
     request(`/students/${sid}/subjects/${encodeURIComponent(code)}`, { method: "DELETE" }),
-  changePassword: (sid, new_password) =>
-    request(`/students/${sid}/password`, { method: "PUT", body: { new_password } }),
+  changePassword: (sid, current_password, new_password) =>
+    request(`/students/${sid}/password`, { method: "PUT", body: { current_password, new_password } }),
 
   // Admin
   listStudents: () => request("/admin/students"),
