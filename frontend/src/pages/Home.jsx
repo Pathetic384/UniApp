@@ -53,7 +53,6 @@ export default function Home() {
               <span>See your average and whether you're passing. Remove subjects or change your password any time.</span>
             </li>
           </ol>
-          <Link to={studentLink} className="textlink">Go to my enrolment</Link>
         </div>
       </section>
 
@@ -70,7 +69,6 @@ export default function Home() {
             <li>Split students into pass and fail</li>
             <li>Remove one student, or clear the whole database</li>
           </ul>
-          <Link to="/admin" className="textlink">Open the admin view</Link>
         </div>
       </section>
 

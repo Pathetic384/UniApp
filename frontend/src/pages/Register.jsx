@@ -48,11 +48,8 @@ export default function Register() {
         <label>
           University email
           <input type="email" autoComplete="username" value={email}
-            onChange={(e) => setEmail(e.target.value)} placeholder="john.smith@university.com"
+            onChange={(e) => setEmail(e.target.value)} placeholder="Format: firstname.lastname@university.com"
             aria-invalid={email ? !emailOk : undefined} />
-          <span className={`rule ${email ? (emailOk ? "ok" : "bad") : ""}`}>
-            Format: firstname.lastname@university.com
-          </span>
         </label>
         <label>
           Password
