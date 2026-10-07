@@ -8,7 +8,7 @@ from models.student import Student, load_student
 
 class Database:
     def __init__(self):
-        self.filename = path_for("students.data")
+        self.filename = path_for("database/students.data")
         self.log = ActivityLog()
         # create the file if it does not exist yet
         if not os.path.exists(self.filename):
