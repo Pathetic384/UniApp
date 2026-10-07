@@ -20,16 +20,8 @@ export default function Layout() {
           <div className="session">
             {student ? (
               <>
-                <span className="session-name">{student.name}</span>
-                <button
-                  className="btn btn-quiet"
-                  onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }}
-                >
-                  Log out
-                </button>
+                <NavLink to="/student" className="btn btn-quiet">{student.name}</NavLink>
+                <NavLink to="/" className="btn btn-quiet">Log out</NavLink>
               </>
             ) : (
               <>

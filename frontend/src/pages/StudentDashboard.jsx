@@ -44,7 +44,7 @@ export default function StudentDashboard() {
     try {
       await api.enrol(student.id);
       await refresh();
-      setInfo("Enrolled in a new subject.");
+      setInfo("Enroled in a new subject successfully!");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -59,7 +59,7 @@ export default function StudentDashboard() {
     try {
       await api.removeSubject(student.id, code);
       await refresh();
-      setInfo(`Removed subject ${code}.`);
+      setInfo(`Removed subject ${code} successfully!`);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -79,19 +79,10 @@ export default function StudentDashboard() {
           </p>
           <div className="actions">
             <button className="btn btn-primary" onClick={enrol} disabled={busy || full}>
-              Enrol in a subject
+              + Enrol in a subject
             </button>
             <Link to="/student/password" className="btn">Change password</Link>
           </div>
-        </div>
-        <div className={`overall ${overall ? `band-${overall}` : "band-none"}`}>
-          <span className="overall-grade">{overall || "–"}</span>
-          <span className="overall-avg">
-            {subjects.length ? `Average ${fmtAvg(student.average)}` : "No subjects yet"}
-          </span>
-          {subjects.length > 0 && (
-            <span className="overall-status">{student.passed ? "Passing" : "Not passing"}</span>
-          )}
         </div>
       </section>
 
@@ -117,7 +108,7 @@ export default function StudentDashboard() {
             ) : (
               <button key={`empty-${i}`} className="slot slot-empty slot-action" onClick={enrol} disabled={busy}>
                 <span className="slot-code">Free slot</span>
-                <span className="muted small">Enrol in a subject</span>
+                <span className="muted small">+ Enrol in a subject</span>
               </button>
             )
           )}
