@@ -1,0 +1,78 @@
+/* Home page only */
+.home { display: flex; flex-direction: column; gap: 5rem; }
+
+/* Hero */
+.home-hero {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+.home-hero h1 { font-size: clamp(2.25rem, 5vw, 3.4rem); max-width: 15ch; margin-bottom: 1rem; }
+.home-hero-media { position: relative; margin: 0 0 2.5rem; }
+.home-hero-media img {
+  display: block; width: 100%; max-width: 620px; aspect-ratio: 733 / 417;
+  object-fit: cover; border-radius: 18px;
+}
+
+/* Floating enrolment card: ties the photo back to what the app does */
+.home-enrol-card {
+  position: absolute; left: -1.75rem; bottom: -2.5rem;
+  width: 250px; background: var(--surface); border-radius: var(--r-md);
+  padding: .85rem .9rem .9rem;
+  box-shadow: 0 14px 34px rgba(26, 34, 56, .18), 0 2px 6px rgba(26, 34, 56, .08);
+}
+.hec-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .6rem; font-size: .875rem; }
+.hec-head span { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.hec-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+.hec-slot {
+  aspect-ratio: 1 / 1.15; border-radius: 8px; background: var(--paper);
+  border-top: 4px solid var(--band); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; line-height: 1;
+}
+.hec-grade { font: 800 1.35rem var(--display); color: var(--band); }
+.hec-mark { font-size: .75rem; color: var(--ink-soft); margin-top: .2rem; font-variant-numeric: tabular-nums; }
+.hec-empty { border: 2px dashed var(--line); background: transparent; }
+
+/* Audience rows */
+.home-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center;
+}
+.home-row-flip .home-row-img { order: 2; }
+.home-row-img {
+  width: 100%; max-width: 540px; aspect-ratio: 3 / 2; object-fit: cover;
+  border-radius: 18px; display: block;
+}
+.home-row-copy { max-width: 46ch; }
+.home-row-copy h2 { font-size: 1.85rem; margin-bottom: 1rem; }
+
+/* Real sequence, so numbered */
+.home-steps { list-style: none; counter-reset: step; padding: 0; margin: 0 0 1.5rem; }
+.home-steps li {
+  counter-increment: step; position: relative; padding: 0 0 1.1rem 3rem;
+  display: flex; flex-direction: column; gap: .15rem;
+}
+.home-steps li::before {
+  content: counter(step); position: absolute; left: 0; top: -.1rem;
+  width: 2rem; height: 2rem; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font: 700 .95rem/2rem var(--display); text-align: center;
+}
+.home-steps li:not(:last-child)::after {
+  content: ""; position: absolute; left: calc(1rem - 1px); top: 2.1rem; bottom: .15rem;
+  width: 2px; background: var(--line);
+}
+.home-steps span { color: var(--ink-soft); }
+
+.home-features { padding-left: 1.1rem; margin: 0 0 1.5rem; }
+.home-features li { margin-bottom: .4rem; }
+
+@media (max-width: 860px) {
+  .home { gap: 3.5rem; }
+  .home-hero, .home-row { grid-template-columns: 1fr; gap: 2rem; }
+  .home-row-flip .home-row-img { order: 0; }
+  .home-enrol-card { left: 1rem; bottom: -2.25rem; }
+}
+@media (max-width: 420px) {
+  .home-enrol-card { width: calc(100% - 2rem); }
+}
