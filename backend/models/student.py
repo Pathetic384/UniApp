@@ -69,7 +69,13 @@ class Student:
 
         self.email = email
         self.password = password
-        self.name = input(TAB + "Name: ").strip()
+        while True:
+            self.name = input(TAB + "Name: ").strip()
+            if self.name.lower() == BACK:
+                return
+            if self.name != "":
+                break
+            print(TAB + "Name cannot be empty")
         # keep generating until the id is not used by another student
         used = []
         for s in students:
