@@ -20,12 +20,12 @@ export default function Layout() {
           <div className="session">
             {student ? (
               <>
-                <span className="session-name">{student.name}</span>
+                <NavLink to="/student" className="btn btn-quiet">{student.name}</NavLink>
                 <button
                   className="btn btn-quiet"
                   onClick={() => {
                     logout();
-                    navigate("/login");
+                    navigate("/");
                   }}
                 >
                   Log out
@@ -33,8 +33,8 @@ export default function Layout() {
               </>
             ) : (
               <>
-                <NavLink to="/register" className="btn btn-quiet">Sign up</NavLink>
                 <NavLink to="/login" className="btn btn-quiet">Log in</NavLink>
+                <NavLink to="/register" className="btn btn-primary">Sign up</NavLink>
               </>
             )}
           </div>
