@@ -42,9 +42,13 @@ export default function StudentDashboard() {
     setError("");
     setInfo("");
     try {
-      await api.enrol(student.id);
+      const prevCodes = new Set((student.subjects || []).map((s) => s.code));
+      const res = await api.enrol(student.id);
+      const updated = res?.student ?? res;
+      const newSub = (updated?.subjects || []).find((s) => !prevCodes.has(s.code)) || updated?.subjects?.[updated?.subjects?.length - 1];
+      const code = newSub?.code;
       await refresh();
-      setInfo("Enroled in a new subject successfully!");
+      setInfo(code ? `Enroled in subject ${code} successfully!` : "Enroled in a new subject successfully!");
     } catch (err) {
       setError(err.message);
     } finally {

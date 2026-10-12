@@ -19,7 +19,23 @@ export default function Register() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    if (!emailOk || !pwdOk) {
+    if (!email.trim() && !password) {
+      setError("Enter both your email and password to create an account.");
+      return;
+    }
+    if (!email.trim()) {
+      setError("Enter your university email to create an account.");
+      return;
+    }
+    if (!emailOk && !pwdOk) {
+      setError("Incorrect email format (must be firstname.lastname@university.com) and password rules not met.");
+      return;
+    }
+    if (!emailOk) {
+      setError("Incorrect email format. Must be firstname.lastname@university.com");
+      return;
+    }
+    if (!pwdOk) {
       setError("Fix the highlighted rules before creating your account.");
       return;
     }
@@ -49,7 +65,7 @@ export default function Register() {
           University email
           <input type="email" autoComplete="username" value={email}
             onChange={(e) => setEmail(e.target.value)} placeholder="firstname.lastname@university.com"
-            aria-invalid={email ? !emailOk : undefined} />
+            aria-invalid={!emailOk && (error || email) ? "true" : undefined} />
         </label>
         <label>
           Password
