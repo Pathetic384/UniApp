@@ -34,8 +34,10 @@ export default function StudentDashboard() {
 
   async function enrol() {
     if (full) {
-      // Story 304: enrolment limit.
-      setError(`You're already enrolled in ${MAX_SUBJECTS} subjects. Remove one to enrol in another.`);
+      // Story 304: enrolment limit. The button stays enabled so the student
+      // gets told why, instead of a dead control that explains nothing.
+      setInfo("");
+      setError(`You are already enrolled in ${MAX_SUBJECTS} subjects. Remove one before enrolling in another.`);
       return;
     }
     setBusy(true);
@@ -82,7 +84,7 @@ export default function StudentDashboard() {
             Student ID {student.id} · {student.email}
           </p>
           <div className="actions">
-            <button className="btn btn-primary" onClick={enrol} disabled={busy || full}>
+            <button className="btn btn-primary" onClick={enrol} disabled={busy}>
               + Enrol in a subject
             </button>
             <Link to="/student/password" className="btn">Change password</Link>
@@ -110,14 +112,14 @@ export default function StudentDashboard() {
                 </button>
               </article>
             ) : (
-              <button key={`empty-${i}`} className="slot slot-empty slot-action" onClick={enrol} disabled={busy}>
+              <div key={`empty-${i}`} className="slot slot-empty">
                 <span className="slot-code">Free slot</span>
-                <span className="muted small">+ Enrol in a subject</span>
-              </button>
+                <span className="muted small">Use the button above</span>
+              </div>
             )
           )}
         </div>
-        {full && <p className="muted small">You've reached the four-subject limit.</p>}
+
       </section>
     </>
   );
