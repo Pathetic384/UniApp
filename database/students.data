@@ -98,3 +98,6 @@
 {"id":"403022","name":"Elena Ross","email":"elena.ross@university.com","password":"Elenaross274","subjects":[{"code":"269","mark":69,"grade":"C"},{"code":"544","mark":63,"grade":"P"},{"code":"894","mark":88,"grade":"HD"},{"code":"908","mark":93,"grade":"HD"}]}
 {"id":"521776","name":"Leo Foster","email":"leo.foster@university.com","password":"Leofoster860","subjects":[{"code":"677","mark":57,"grade":"P"},{"code":"231","mark":70,"grade":"C"},{"code":"382","mark":67,"grade":"C"},{"code":"682","mark":72,"grade":"C"}]}
 {"id":"988504","name":"Sarah Chen","email":"sarah.chen@university.com","password":"Sarahchen396","subjects":[{"code":"833","mark":88,"grade":"HD"},{"code":"531","mark":99,"grade":"HD"},{"code":"188","mark":93,"grade":"HD"},{"code":"721","mark":96,"grade":"HD"}]}
+{"id":"030696","name":"Nguyen Bach","email":"Nguyen.Bach@university.com","password":"Helloworld123","subjects":[]}
+{"id":"990468","name":"Nguyen Bach Tran","email":"Nguyen.BachTran@university.com","password":"Helloworld123","subjects":[]}
+{"id":"238756","name":"Nguyen Bach","email":"Bach.Nguyen@university.com","password":"Helloworld123","subjects":[]}

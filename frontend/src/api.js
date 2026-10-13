@@ -1,5 +1,4 @@
 // Thin client for the FastAPI backend (backend/api/main.py).
-// In development, "/api" is proxied to http://127.0.0.1:8000 by vite.config.js.
 const BASE = import.meta.env.VITE_API_URL || "/api";
 
 async function request(path, { method = "GET", body } = {}) {
@@ -36,23 +35,15 @@ async function request(path, { method = "GET", body } = {}) {
 // Some endpoints may wrap the student, e.g. { student: {...} }.
 const unwrap = (d) => d?.student ?? d;
 
-// "john.smith@university.com" -> "John Smith", as promised on the register page.
-export const nameFromEmail = (email) =>
-  email.split("@")[0].split(".").map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(" ");
-
 export const api = {
   // Student
-  register: (email, password) =>
-    request("/register", { method: "POST", body: { name: nameFromEmail(email), email, password } }).then(unwrap),
-  login: (email, password) =>
-    request("/login", { method: "POST", body: { email, password } }).then(unwrap),
+  register: (name, email, password) => request("/register", { method: "POST", body: { name, email, password } }).then(unwrap),
+  login: (email, password) => request("/login", { method: "POST", body: { email, password } }).then(unwrap),
   getStudent: (sid) => request(`/students/${sid}`).then(unwrap),
   listSubjects: (sid) => request(`/students/${sid}/subjects`),
   enrol: (sid) => request(`/students/${sid}/subjects`, { method: "POST" }),
-  removeSubject: (sid, code) =>
-    request(`/students/${sid}/subjects/${encodeURIComponent(code)}`, { method: "DELETE" }),
-  changePassword: (sid, current_password, new_password) =>
-    request(`/students/${sid}/password`, { method: "PUT", body: { current_password, new_password } }),
+  removeSubject: (sid, code) => request(`/students/${sid}/subjects/${encodeURIComponent(code)}`, { method: "DELETE" }),
+  changePassword: (sid, current_password, new_password) => request(`/students/${sid}/password`, { method: "PUT", body: { current_password, new_password } }),
 
   // Admin
   listStudents: () => request("/admin/students"),
@@ -80,5 +71,5 @@ export const EMAIL_RULE = /^[A-Za-z]+\.[A-Za-z]+@university\.com$/;
 export const passwordChecks = (pwd) => [
   { ok: /^[A-Z]/.test(pwd), text: "Starts with an uppercase letter" },
   { ok: (pwd.match(/[A-Za-z]/g) || []).length >= 5, text: "At least 5 letters" },
-  { ok: /[0-9]{3,}$/.test(pwd), text: "Ends with at least 3 digits" },
+  { ok: /[0-9]{3,}$/.test(pwd), text: "Ends with at least 3 numbers" },
 ];

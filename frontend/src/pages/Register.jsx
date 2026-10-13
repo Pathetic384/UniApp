@@ -5,6 +5,7 @@ import { useAuth } from "../auth.jsx";
 import Notice from "../components/Notice.jsx";
 
 export default function Register() {
+  const [Name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,10 @@ export default function Register() {
 
   async function onSubmit(e) {
     e.preventDefault();
+    if (!Name.trim()) {
+      setError("Enter your name.");
+      return;
+    }
     if (!email.trim() && !password) {
       setError("Enter both your email and password to create an account.");
       return;
@@ -42,7 +47,7 @@ export default function Register() {
     setBusy(true);
     setError("");
     try {
-      const student = await api.register(email.trim(), password);
+      const student = await api.register(Name.trim(), email.trim(), password);
       if (student?.id) {
         setStudent(student);
         navigate("/student", { state: { welcome: true } });
@@ -59,8 +64,13 @@ export default function Register() {
   return (
     <section className="form-page">
       <h1>Create a student account</h1>
-      <p className="lead">Your name is taken from your email, and a 6-digit student ID is assigned for you.</p>
+      <p className="lead">Fill in your details below to create your student account.</p>
       <form onSubmit={onSubmit} className="form" noValidate>
+        <label>
+          Name
+          <input type="text" autoComplete="given-name" value={Name}
+            onChange={(e) => setName(e.target.value)} placeholder="John" />
+        </label>
         <label>
           University email
           <input type="email" autoComplete="username" value={email}
