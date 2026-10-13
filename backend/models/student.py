@@ -7,7 +7,7 @@ from models.subject import Subject
 TAB = "        "
 BACK = "x"
 EMAIL_PATTERN = r"^[A-Za-z]+\.[A-Za-z]+@university\.com$"
-PASSWORD_PATTERN = r"^[A-Z][A-Za-z]{5,}[0-9]{3,}$"
+PASSWORD_PATTERN = r"^[A-Z][A-Za-z]{4,}[0-9]{3,}$"
 
 
 class Student:
@@ -24,7 +24,7 @@ class Student:
         return re.match(EMAIL_PATTERN, email)
 
     def validate_password(self, password):
-        # capital letter first, at least 5 more letters, then 3+ digits
+        # capital letter first, 4+ more letters (5 in total), then 3+ digits
         return re.match(PASSWORD_PATTERN, password)
 
     def generate_id(self):
