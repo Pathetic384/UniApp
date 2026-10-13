@@ -1,3 +1,5 @@
+import shutil
+
 from models.grade import Grade
 
 TAB = "        "
@@ -23,6 +25,19 @@ class Admin:
                 text = text + ", "
         return text
 
+    def print_group(self, head, students):
+        # one line when it fits the terminal, otherwise wrapped with the
+        # continuation lines aligned under the opening bracket
+        line = head + self.join(students) + "]"
+        width = shutil.get_terminal_size((100, 24)).columns
+        if len(line) <= width:
+            print(line)
+            return
+        pad = " " * len(head)
+        for i in range(len(students)):
+            tail = "," if i < len(students) - 1 else "]"
+            print((head if i == 0 else pad) + self.describe(students[i]) + tail)
+
     def show_students(self):
         students = self.db.read_students()
         print(TAB + "Student List")
@@ -45,7 +60,7 @@ class Admin:
                 if Grade.from_mark(s.average()) == g:
                     group.append(s)
             if len(group) > 0:
-                print(TAB + g.value + "  --> [" + self.join(group) + "]")
+                self.print_group(TAB + g.value + "  --> [", group)
 
     def partition_students(self):
         students = self.db.read_students()
@@ -57,8 +72,8 @@ class Admin:
                 pass_list.append(s)
             else:
                 fail_list.append(s)
-        print(TAB + "FAIL --> [" + self.join(fail_list) + "]")
-        print(TAB + "PASS --> [" + self.join(pass_list) + "]")
+        self.print_group(TAB + "FAIL --> [", fail_list)
+        self.print_group(TAB + "PASS --> [", pass_list)
 
     def remove_student(self):
         student_id = input(TAB + "Remove by ID: ").strip()
