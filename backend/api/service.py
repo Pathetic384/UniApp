@@ -47,11 +47,7 @@ def register(name, email, password):
     student.email = email
     student.password = password
     student.name = name.strip()
-    # unique 6-digit id
-    used = {s.id for s in db.read_students()}
-    student.id = student.generate_id()
-    while student.id in used:
-        student.id = student.generate_id()
+    student.id = student.generate_id({s.id for s in db.read_students()})
 
     db.add_student(student)
     db.log.record("REGISTER", student.name + " :: " + student.id + " (" + student.email + ")")
@@ -77,10 +73,7 @@ def enrol(sid):
     student = get_student(sid)
     if len(student.subjects) >= 4:
         raise ApiError(409, "Students are allowed to enrol in 4 subjects only")
-    subject = Subject()
-    used = {s.code for s in student.subjects}
-    while subject.code in used:
-        subject = Subject()
+    subject = Subject(used={s.code for s in student.subjects})
     student.subjects.append(subject)
     db.save_student(student)
     db.log.record("ENROL", student.name + " :: " + student.id + " enrolled in Subject-" + str(subject.code).zfill(3))

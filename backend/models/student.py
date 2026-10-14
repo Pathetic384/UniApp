@@ -27,8 +27,12 @@ class Student:
         # capital letter first, 4+ more letters (5 in total), then 3+ digits
         return re.match(PASSWORD_PATTERN, password)
 
-    def generate_id(self):
-        return str(random.randint(1, 999999)).zfill(6)
+    def generate_id(self, used=()):
+        # keeps drawing until the id is not one of the ids in used
+        new_id = str(random.randint(1, 999999)).zfill(6)
+        while new_id in used:
+            new_id = str(random.randint(1, 999999)).zfill(6)
+        return new_id
 
     def ask_credentials(self):
         # keep asking until email and password are the right format, or x to go back
@@ -76,13 +80,7 @@ class Student:
             if self.name != "":
                 break
             print(TAB + "Name cannot be empty")
-        # keep generating until the id is not used by another student
-        used = []
-        for s in students:
-            used.append(s.id)
-        self.id = self.generate_id()
-        while self.id in used:
-            self.id = self.generate_id()
+        self.id = self.generate_id([s.id for s in students])
         print(TAB + "Enrolling Student " + self.name)
         db.add_student(self)
         db.log.record("REGISTER", self.name + " :: " + self.id + " (" + self.email + ")")
@@ -111,13 +109,7 @@ class Student:
         if len(self.subjects) >= 4:
             print(TAB + "Students are allowed to enrol in 4 subjects only")
             return
-        # keep generating until the code is not one the student already has
-        used = []
-        for s in self.subjects:
-            used.append(s.code)
-        subject = Subject()
-        while subject.code in used:
-            subject = Subject()
+        subject = Subject(used=[s.code for s in self.subjects])
         self.subjects.append(subject)
         print(TAB + "Enrolling in Subject-" + str(subject.code))
         print(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects")
