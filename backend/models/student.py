@@ -2,6 +2,7 @@ import re
 import json
 import random
 
+from models.colour import title, note, alert
 from models.subject import Subject
 
 TAB = "        "
@@ -44,10 +45,10 @@ class Student:
             if password.lower() == BACK:
                 return None
             if self.validate_email(email) and self.validate_password(password):
-                print(TAB + "email and password formats acceptable")
+                print(note(TAB + "email and password formats acceptable"))
                 return email, password
             else:
-                print(TAB + "Incorrect email or password format")
+                print(alert(TAB + "Incorrect email or password format"))
 
     def average(self):
         if len(self.subjects) == 0:
@@ -59,7 +60,7 @@ class Student:
 
     # ---------- use-case actions ----------
     def register(self, db):
-        print(TAB + "Student Sign Up")
+        print(title(TAB + "Student Sign Up"))
         credentials = self.ask_credentials()
         if credentials is None:
             return
@@ -68,7 +69,7 @@ class Student:
         students = db.read_students()
         for s in students:
             if s.email == email:
-                print(TAB + "Student " + s.name + " already exists")
+                print(alert(TAB + "Student " + s.name + " already exists"))
                 return
 
         self.email = email
@@ -79,16 +80,16 @@ class Student:
                 return
             if self.name != "":
                 break
-            print(TAB + "Name cannot be empty")
+            print(alert(TAB + "Name cannot be empty"))
         self.id = self.generate_id([s.id for s in students])
-        print(TAB + "Enrolling Student " + self.name)
+        print(note(TAB + "Enrolling Student " + self.name))
         db.add_student(self)
         db.log.record("REGISTER", self.name + " :: " + self.id + " (" + self.email + ")")
 
     def login(self, db):
         # ask for credentials, then load the matching student's data into self.
         # returns True if the login worked.
-        print(TAB + "Student Sign In")
+        print(title(TAB + "Student Sign In"))
         credentials = self.ask_credentials()
         if credentials is None:
             return False
@@ -102,17 +103,17 @@ class Student:
                 self.password = s.password
                 self.subjects = s.subjects
                 return True
-        print(TAB + "Student does not exist")
+        print(alert(TAB + "Student does not exist"))
         return False
 
     def enrol_subject(self, db):
         if len(self.subjects) >= 4:
-            print(TAB + "Students are allowed to enrol in 4 subjects only")
+            print(alert(TAB + "Students are allowed to enrol in 4 subjects only"))
             return
         subject = Subject(used=[s.code for s in self.subjects])
         self.subjects.append(subject)
-        print(TAB + "Enrolling in Subject-" + str(subject.code))
-        print(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects")
+        print(note(TAB + "Enrolling in Subject-" + str(subject.code)))
+        print(note(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects"))
         db.save_student(self)
         db.log.record("ENROL", self.name + " :: " + self.id + " enrolled in Subject-" + str(subject.code).zfill(3))
 
@@ -123,16 +124,16 @@ class Student:
             if str(s.code) == code or str(s.code).zfill(3) == code:
                 found = s
         if found is None:
-            print(TAB + "Subject " + code + " does not exist")
+            print(alert(TAB + "Subject " + code + " does not exist"))
         else:
             self.subjects.remove(found)
-            print(TAB + "Droping Subject-" + str(found.code))
-            print(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects")
+            print(note(TAB + "Droping Subject-" + str(found.code)))
+            print(note(TAB + "You are now enrolled in " + str(len(self.subjects)) + " out of 4 subjects"))
             db.save_student(self)
             db.log.record("DROP", self.name + " :: " + self.id + " dropped Subject-" + str(found.code).zfill(3))
 
     def view_enrolment(self):
-        print(TAB + "Showing " + str(len(self.subjects)) + " subjects")
+        print(note(TAB + "Showing " + str(len(self.subjects)) + " subjects"))
         for s in self.subjects:
             code = str(s.code).zfill(3)
             grade = s.grade.value
@@ -141,12 +142,12 @@ class Student:
             print(TAB + "[ Subject::" + code + " -- mark = " + str(s.mark) + " -- grade = " + grade + " ]")
 
     def change_password(self, db):
-        print(TAB + "Updating Password")
+        print(note(TAB + "Updating Password"))
         current = input(TAB + "Current Password: ").strip()
         if current.lower() == BACK:
             return
         if current != self.password:
-            print(TAB + "Incorrect current password")
+            print(alert(TAB + "Incorrect current password"))
             return
         while True:
             new_password = input(TAB + "New Password: ").strip()
@@ -154,14 +155,14 @@ class Student:
                 return
             if self.validate_password(new_password):
                 break
-            print(TAB + "Incorrect password format")
+            print(alert(TAB + "Incorrect password format"))
         while True:
             confirm = input(TAB + "Confirm Password: ").strip()
             if confirm.lower() == BACK:
                 return
             if confirm == new_password:
                 break
-            print(TAB + "Password does not match - try again")
+            print(alert(TAB + "Password does not match - try again"))
         self.password = new_password
         db.save_student(self)
         db.log.record("PASSWORD", self.name + " :: " + self.id + " changed their password")

@@ -1,3 +1,4 @@
+from models.colour import menu, note, alert
 from models.database import Database
 from models.admin import Admin
 from models.student import Student
@@ -14,25 +15,25 @@ class CLIUniApp:
             self.university_menu()
         except (EOFError, KeyboardInterrupt):
             print()
-            print("Thank You")
+            print(note("Thank You"))
 
     def university_menu(self):
         while True:
-            choice = input("University System: (A)dmin, (S)tudent, or X : ").strip().lower()
+            choice = input(menu("University System: (A)dmin, (S)tudent, or X : ")).strip().lower()
             if choice == "a":
                 self.admin_menu()
             elif choice == "s":
                 self.student_menu()
             elif choice == "x":
-                print("Thank You")
+                print(note("Thank You"))
                 break
             else:
-                print("Invalid option")
+                print(alert("Invalid option"))
 
     # ---------- student system ----------
     def student_menu(self):
         while True:
-            choice = input(TAB + "Student System (l/r/x): ").strip().lower()
+            choice = input(menu(TAB + "Student System (l/r/x): ")).strip().lower()
             if choice == "l":
                 student = Student()
                 if student.login(self.db):
@@ -42,11 +43,11 @@ class CLIUniApp:
             elif choice == "x":
                 break
             else:
-                print(TAB + "Invalid option")
+                print(alert(TAB + "Invalid option"))
 
     def course_menu(self, student):
         while True:
-            choice = input(TAB + "Student Course Menu (c/e/r/s/x): ").strip().lower()
+            choice = input(menu(TAB + "Student Course Menu (c/e/r/s/x): ")).strip().lower()
             if choice == "c":
                 student.change_password(self.db)
             elif choice == "e":
@@ -58,13 +59,13 @@ class CLIUniApp:
             elif choice == "x":
                 break
             else:
-                print(TAB + "Invalid option")
+                print(alert(TAB + "Invalid option"))
 
     # ---------- admin system ----------
     def admin_menu(self):
         admin = Admin(self.db)
         while True:
-            choice = input(TAB + "Admin System (c/g/p/r/s/v/x): ").strip().lower()
+            choice = input(menu(TAB + "Admin System (c/g/p/r/s/v/x): ")).strip().lower()
             if choice == "c":
                 admin.clear_database()
             elif choice == "g":
@@ -80,4 +81,4 @@ class CLIUniApp:
             elif choice == "x":
                 break
             else:
-                print(TAB + "Invalid option")
+                print(alert(TAB + "Invalid option"))

@@ -1,5 +1,6 @@
 import shutil
 
+from models.colour import note, alert
 from models.grade import Grade
 
 TAB = "        "
@@ -29,7 +30,7 @@ class Admin:
         # one line when it fits the terminal, otherwise wrapped with the
         # continuation lines aligned under the opening bracket
         line = head + self.join(students) + "]"
-        width = shutil.get_terminal_size((100, 24)).columns
+        width = shutil.get_terminal_size((200, 24)).columns
         if len(line) <= width:
             print(line)
             return
@@ -40,7 +41,7 @@ class Admin:
 
     def show_students(self):
         students = self.db.read_students()
-        print(TAB + "Student List")
+        print(note(TAB + "Student List"))
         if len(students) == 0:
             print(TAB + TAB + "< Nothing to Display >")
         else:
@@ -49,7 +50,7 @@ class Admin:
 
     def group_students(self):
         students = self.db.read_students()
-        print(TAB + "Grade Grouping")
+        print(note(TAB + "Grade Grouping"))
         if len(students) == 0:
             print(TAB + TAB + "< Nothing to Display >")
             return
@@ -64,7 +65,7 @@ class Admin:
 
     def partition_students(self):
         students = self.db.read_students()
-        print(TAB + "PASS/FAIL Partition")
+        print(note(TAB + "PASS/FAIL Partition"))
         fail_list = []
         pass_list = []
         for s in students:
@@ -78,23 +79,23 @@ class Admin:
     def remove_student(self):
         student_id = input(TAB + "Remove by ID: ").strip()
         if self.db.remove_student(student_id):
-            print(TAB + "Removing Student " + student_id + " Account")
+            print(note(TAB + "Removing Student " + student_id + " Account"))
             self.db.log.record("REMOVE", "Admin removed student " + student_id)
         else:
-            print(TAB + "Student " + student_id + " does not exist")
+            print(alert(TAB + "Student " + student_id + " does not exist"))
 
     def clear_database(self):
-        print(TAB + "Clearing students database")
-        answer = input(TAB + "Are you sure you want to clear the database (Y)ES/(N)O: ").strip().lower()
+        print(note(TAB + "Clearing students database"))
+        answer = input(alert(TAB + "Are you sure you want to clear the database (Y)ES/(N)O: ")).strip().lower()
         if answer == "y":
             count = len(self.db.read_students())
             self.db.clear()
-            print(TAB + "Students data cleared")
+            print(note(TAB + "Students data cleared"))
             self.db.log.record("CLEAR", "Admin cleared the database (" + str(count) + " students removed)")
 
     def show_log(self):
         entries = self.db.log.read_entries(20)
-        print(TAB + "Recent Changes")
+        print(note(TAB + "Recent Changes"))
         if len(entries) == 0:
             print(TAB + TAB + "< Nothing to Display >")
         else:
